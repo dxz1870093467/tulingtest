@@ -1,5 +1,15 @@
 import requests
 
+'''
+21题
+使用线程池采集本站点数据
+地址：https://adworld.xctf.org.cn/contest/list
+字段：标题、时间、主办方
+交付：提交各功能核心截图
+'''
+
+#如果加上 cngizm2ziytq3mwy 和 xhnjc3odeyndrhmj 参数，就只能获取单页加密数据。
+#如果不加 就返回 单页 不加密总数据
 headers = {
     "Accept": "application/json, text/plain, */*",
     "Accept-Language": "zh-CN",
@@ -17,8 +27,7 @@ headers = {
 }
 cookies = {
     "cngizm2ziytq3mwy": "7RcfKFOkrU606ki/7Em2ukWxs0e24hUXTbhHGuhCG+ZPQeBG+g==",
-    # "fogq4n2exnzc0otg": "CgcHOFYNV1NaWEtBQRgSQR1MQ0QdTUFHSEUnenpxJX9xdSV8Bg=="
-    "fogq4n2exnzc0otg": "CQcBOAZZCgUNXlAXTRpHEk5MQEQaTxQaSBZFfCxwdSomIXsoCg=="
+    "fogq4n2exnzc0otg": "BwkHNgZVDg0FWlwHVRZLEkZAREQaSxgSSBpJRBx8cSIuJXcoAg=="
 }
 url = "https://adworld.xctf.org.cn/api/event/release_event/list/"
 params = {
