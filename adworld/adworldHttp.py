@@ -27,11 +27,12 @@ headers = {
 }
 cookies = {
     "cngizm2ziytq3mwy": "7RcfKFOkrU606ki/7Em2ukWxs0e24hUXTbhHGuhCG+ZPQeBG+g==",
-    "fogq4n2exnzc0otg": "BwkHNgZVDg0FWlwHVRZLEkZAREQaSxgSSBpJRBx8cSIuJXcoAg=="
+    "fogq4n2exnzc0otg": "AQQGOwZSBQUGUVAMUgpcDV5XX0QRQBQRRxZOQxxLShodHksjBQ=="
 }
 url = "https://adworld.xctf.org.cn/api/event/release_event/list/"
 params = {
-    "qmze1yzvhyzcyyjr": "BAEBPgAXBwgYMhgbCRgfGExTEwQVHwMsCAEOGkBfEw0XICI1Iyx%2FJSghPS9uOS4sMW1kcSUwNTMDLjIlPWFoawdWQ0NSQk8eBQ%3D%3D"
+    # "qmze1yzvhyzcyyjr": "CgcGOAAfCgwYMwwHEAgDBURTHgAdFgcgCQkyJ3BnLjkXISY5KixzKCAhIDt2IDowMGVrfCU4ODcDL0ZZRBEUFg9WTkdaS0sSDw=="
+    "qmze1yzvhyzcyyjr": "AwYEOQARAQ4QNhwdCx4bHFRVFQIVGwcqAgcKHkBZFQsvJCYzISp7ISAnOyluPSoqK2tldSU2MzULKjYjP2dsb39QRUVSRksYAg%3D%3D"
 }
 response = requests.get(url, headers=headers, cookies=cookies, params=params)
 
