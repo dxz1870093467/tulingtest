@@ -1,8 +1,13 @@
 import requests
 
+"""
+22.(问答题)采集本站首页数据top10
+地址：https://www.chinaindex.net/ranklist/5
+字段：字段不限、存储使用mongodb
+交付：提供数据和代码截图即可说明：禁止使用自动化等技术
+"""
 
 headers = {
-    # "Upgrade-Insecure-Requests": "1",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
     "sec-ch-ua": '"Chromium";v="124", "Microsoft Edge";v="124", "Not-A.Brand";v="99"',
     "sec-ch-ua-mobile": "?0",
@@ -16,7 +21,6 @@ headers = {
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-origin",
     "Origin": "https://www.chinaindex.net",
-    # "UUID": "68915f72-3e40-5081-8a48-196b8459162d",
     "funcID": None,
     "incognitoMode": "0",
     "Referer" : "https://www.chinaindex.net/ranklist/5",
@@ -24,16 +28,14 @@ headers = {
     "Accept-Encoding":"gzip, deflate, br, zstd"
 
 }
+#不携带也可以
 cookies = {
-    # "mobile_iindex_uuid": "68915f72-3e40-5081-8a48-196b8459162d",
-    # "Hm_lvt_2873e2b0bdd5404c734992cd3ae7253f": "1719459633",
-    # "Hm_lpvt_2873e2b0bdd5404c734992cd3ae7253f": "1719460455"
 }
 
 url = "https://www.chinaindex.net/iIndexMobileServer/teleplay/rank/waiting/fans"
 
+##不携带也可以
 params = {
-    # "sign":"46cf510e48f99667216bfa781d6bebab"
 }
 
 response = requests.get(url, headers=headers)
