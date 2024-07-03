@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "express": "^4.19.2",
     "text-encoding": "^0.7.0"
   }
 }

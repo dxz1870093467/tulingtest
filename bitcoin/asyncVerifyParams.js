@@ -1,3 +1,5 @@
+// window = global
+
 window = {
     utils: undefined,
     location: {
@@ -5,10 +7,15 @@ window = {
     }
 }
 
+var traceId = undefined
+
+var sent = undefined;
+
 document = {
     cookie: undefined
 }
 const crypto = require('crypto');
+const timers = require("timers");
 t = {
     "tryEntries": [
         {
@@ -37,7 +44,9 @@ localStorage = {
     "ok_default": "{\"_expire\":{}}",
     "ok_global": "{\"_expire\":{},\"oklink_stay_duration_info\":{\"page\":\"tradeList\",\"time\":803000},\"okI18nVersion\":{\"oklink_web_explorer\":{\"zh_CN\":\"1719817166\"},\"oklink_web_main\":{\"zh_CN\":\"1719551720\"}}}"
 }
-!(()=>{
+
+try {
+   !(()=>{
     "use strict";
     var e = {
         d: (t,n)=>{
@@ -511,10 +520,19 @@ localStorage = {
             return new Promise((function(r, i) {
                 var a = e.apply(t, n);
                 function c(e) {
-                    o(a, r, i, c, u, "next", e)
+                    // if (e === undefined) {
+                        o(a, r, i, c, u, "next", e)
+                    // } else {
+                    //     if (e['Ok-Verify-Sign'] === undefined) {
+                    //         o(a, r, i, c, u, "next", e)
+                    //     } else {
+                    //        return  window.sent = e,
+                    //         sent = e, e
+                    //     }
+                    // }
                 }
                 function u(e) {
-                    o(a, r, i, c, u, "throw", e)
+                    o(a, r, i, c, u, "return", e)
                 }
                 c(void 0)
             }
@@ -1566,7 +1584,7 @@ localStorage = {
             return e.apply(this, arguments)
         }
     }()
-      , Oe = m.get("traceId")
+      , Oe = traceId
       , Ie = function() {
         var e = i(r().mark((function e(t) {
             var n, o, i, a, c, u, l, f, d, p, v, h, g, y, m, w;
@@ -1619,7 +1637,7 @@ localStorage = {
                     case 20:
                         (y = e.sent) && (u.Authorization = y),
                         (m = O.getSiteInfo ? O.getSiteInfo(!1) : void 0) && (u["X-Site-Info"] = m),
-                        u["X-Id-Group"] = "".concat(Oe, "-c-").concat(a);
+                        u["X-Id-Group"] = "".concat(traceId, "-c-").concat(a);
                     case 25:
                         return w = Se(i.headers),
                         e.abrupt("return", s(s(s({}, u), o.headers), w));
@@ -1782,15 +1800,17 @@ localStorage = {
                         });
                     case 13:
                         console.log(e.sent)
+                        sent = e.sent
                         return d = e.sent
-                            // ,
-                        // e.next = 16,
-                        // fetch(c, {
-                        //     method: o.method,
-                        //     headers: d,
-                        //     body: o.body,
-                        //     signal: u || s.controller.signal
-                        // });
+                            ,
+                        e.next = 16
+                            ,
+                        fetch(c, {
+                            method: o.method,
+                            headers: d,
+                            body: o.body,
+                            signal: u || s.controller.signal
+                        });
                     case 16:
                         p = e.sent,
                         f = Ae(p, i),
@@ -2688,8 +2708,8 @@ localStorage = {
                 , o = parseInt(10 * Math.random(), 10);
             return e.concat([n, r, o]).join("")
         }
-        var getApiKey = function () {
-            var t1 = (new Date).getTime()
+        var getApiKey = function (requets_t) {
+            var t1 = requets_t
                 , e = encryptApiKey();
 
             console.log(t1)
@@ -2697,22 +2717,74 @@ localStorage = {
                 comb(e, t1)
         }
 
-
-        e.get.apply(() => e,
+        var zdyfun =  function (requets_time, offset, limit) {
+            e.get.apply(() => e,
             [
                 "/api/explorer/v1/btc/transactionsNoRestrict",
                 {
                     "params": {
-                        "offset": 0,
-                        "limit": 20
+                        "offset": offset,
+                        "limit": limit
                     },
                     "headers": {
-                        "x-apiKey": getApiKey()
+                        "x-apiKey": requets_time
                     },
                     "needSign": true
                 }
-            ])
+            ])}
+
+        window.getApiKey = getApiKey
+        window.zdyfun = zdyfun
 }
 )();
+}catch (error) {
+   console.log(error.message)
+}
 
 
+// 调用示例
+const express = require('express');
+const app = express();
+const port = 3000;  // 设定服务器端口号
+
+// 定义一个 GET 请求的路由
+app.get('/get', async (req, res) => {
+    const requets_time = req.query.requets_time;  // 获取查询参数 requets_time
+    const offset = req.query.offset;  // 获取查询参数 offset
+    const limit = req.query.limit;    // 获取查询参数 limit
+    traceId = req.query.trace_id
+
+    // 定义一个 Promise 用于延迟返回结果
+    const delayedPromise = new Promise((resolve, reject) => {
+        const api_key = window.getApiKey(requets_time);
+        // 假设 window.zdyfun 是同步函数
+        window.zdyfun(api_key, offset, limit);
+        timeoutRef = setTimeout(() => {
+            try {
+                resolve(sent);  // 返回异步操作的结果
+            } catch (error) {
+                reject(error);  // 处理错误情况
+            }
+        }, 20); // 20 毫秒
+    });
+
+    try {
+         // 等待延迟 Promise 执行完成
+        sent = await delayedPromise;
+        console.log("sent:", sent);
+        lsbl= sent;
+        res.send(lsbl);  // 返回异步操作的结果
+
+         // 在异步操作完成后清除 setTimeout
+        clearTimeout(timeoutRef);
+
+    } catch (error) {
+         console.error("Error:", error);
+        res.status(500).send("Error occurred.");  // 返回错误响应
+    }
+});
+
+// 启动服务器
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});

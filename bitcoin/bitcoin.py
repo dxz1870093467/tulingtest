@@ -31,55 +31,81 @@ def get_traceId():
 
 matchTraceId = get_traceId()
 
-current_timestamp = int(time.time())
+current_timestamp = int(time.time() * 1000)  #1720007099875
 
-# 读取JavaScript文件
-with open("verifyParams.js", "r") as file:
-    js_code = file.read()
+# 调用JavaScript接口
+# 定义请求参数
+requets_time = current_timestamp
+offset = 0
+limit = 20
+trace_id = matchTraceId
 
-# 编译JavaScript代码
-ctx = execjs.compile(js_code)
-
-# 调用JavaScript函数
-result = ctx.call("add", 3, 4)
-
-headers = {
-    "accept": "application/json",
-    "accept-language": "zh-CN,zh;q=0.9",
-    "app-type": "web",
-    "priority": "u=1, i",
-    "referer": "https://www.oklink.com/zh-hans/btc/tx-list/page/1",
-    "sec-ch-ua": '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "Windows",
-    "sec-fetch-dest": "",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "same-origin",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-    "x-cdn": "https://static.oklink.com",
-    "x-locale": "zh_CN",
-    "x-site-info": "9FjOikHdpRnblJCLiskTJx0SPJiOiUGZvNmIsIiTDJiOi42bpdWZyJye",
-    "x-utc": "8",
-    "x-zkdex-env": "0",
-    "x-apikey": "LWIzMWUtNDU0Ny05Mjk5LWI2ZDA3Yjc2MzFhYmEyYzkwM2NjfDI4MzEwODA5MTM3NjAyNDg=",  # 加密
-    "devid": "ccd76455-5828-4ea1-bf9c-01cdc37097bd",  # 加密
-    "ok-verify-sign": "GFilASlnwmbJ/wYW7mpAzAf5gavInZMwnRRmlLNbVQA=",  # 加密
-    "ok-verify-token": "40a61f2a-a58f-4edf-9868-b02fd7b21271",  # 加密
-    "x-id-group": matchTraceId + "-c-1",  # 加密
-}
-url = "https://www.oklink.com/api/explorer/v1/btc/transactionsNoRestrict"
+# 构建请求 URL 和参数
+url = 'http://localhost:3000/get'
 params = {
-    "offset": "20",
-    "limit": "20",
-    "t": current_timestamp
+    'requets_time': requets_time,
+    'offset': offset,
+    'limit': limit,
+    'trace_id': trace_id
 }
 
-cookies = {
-    "aliyungf_tc" : "fd83fe359df50a6f60f455e820cf3ce815684db02bd112e4b1a0c9198711d7e9",
-    "devId" : "ccd76455-5828-4ea1-bf9c-01cdc37097bd",  #加密
-    "ok-ses-id" : "9x6UwkzE66KVMBREfh3yCt03eNyW5zRu7sqm30RFgbFHWMQ5KY8hCJQWHbKybLuoOgXRGZ2JVgi4NQo37lo9kkL8yIIXoa0iZE/UkmwC3xUC1UW5jgOIqAh1h6h7ZC38",
-}
+def dyfun(data):
+    headers = {
+        "accept": "application/json",
+        "accept-language": "zh-CN,zh;q=0.9",
+        "app-type": "web",
+        "priority": "u=1, i",
+        "referer": "https://www.oklink.com/zh-hans/btc/tx-list/page/1",
+        "sec-ch-ua": '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "Windows",
+        "sec-fetch-dest": "",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "x-cdn": "https://static.oklink.com",
+        "x-locale": "zh_CN",
+        "x-site-info": "9FjOikHdpRnblJCLiskTJx0SPJiOiUGZvNmIsIiTDJiOi42bpdWZyJye",
+        "x-utc": "8",
+        "x-zkdex-env": "0",
+        "x-apikey": data["X-Apikey"],  # 加密
+        "devid": data["Devid"],  # 加密
+        "ok-verify-sign": data["Ok-Verify-Sign"],  # 加密
+        "ok-verify-token": data["Ok-Verify-Token"],  # 加密
+        "x-id-group": data["X-Id-Group"],  # 加密
+    }
+    url = "https://www.oklink.com/api/explorer/v1/btc/transactionsNoRestrict"
+    params = {
+        "offset": offset,
+        "limit": limit,
+        "t": current_timestamp
+    }
 
-response = requests.get(url, headers=headers, params=params, cookies=cookies)
+    cookies = {
+        "aliyungf_tc": "84327dd30cb91c7a1dfa9d713f9b53421cd9cef3b1d234760358e061031d0b28",
+        "devId": data["Devid"],  # 加密
+        # "ok-ses-id": "9x6UwkzE66KVMBREfh3yCt03eNyW5zRu7sqm30RFgbFHWMQ5KY8hCJQWHbKybLuoOgXRGZ2JVgi4NQo37lo9kkL8yIIXoa0iZE/UkmwC3xUC1UW5jgOIqAh1h6h7ZC38",
+    }
 
-print(response.text)
+    response = requests.get(url, headers=headers, params=params, cookies=cookies)
+
+    print(response.text)
+
+
+try:
+    # 发送同步 GET 请求
+    response = requests.get(url, params=params)
+
+    # 检查响应状态码
+    if response.status_code == 200:
+        # 处理成功的响应
+        data = response.json()  # 假设响应内容是 JSON 格式
+        print("Response received:", data)
+        #调用一次okx接口
+        dyfun(data)
+    else:
+        print(f"Error occurred: {response.status_code}")
+
+except requests.RequestException as e:
+    # 处理请求异常
+    print("Error occurred:", e)
