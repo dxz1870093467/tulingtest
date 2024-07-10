@@ -1,6 +1,11 @@
 {
   "dependencies": {
+    "axios": "^1.7.2",
+    "crypto-js": "^4.0.0",
     "express": "^4.19.2",
-    "text-encoding": "^0.7.0"
+    "jsencrypt": "^3.3.2",
+    "node-rsa": "^1.1.1",
+    "text-encoding": "^0.7.0",
+    "vm2": "^3.9.19"
   }
 }

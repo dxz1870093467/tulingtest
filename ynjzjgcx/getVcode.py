@@ -8,7 +8,6 @@ import requests
 """
 
 #每翻一次页，就需要滑动验证码校验
-
 headers = {
     "Accept": "application/json, text/plain, */*",
     "Accept-Language": "zh-CN,zh;q=0.9",
@@ -29,9 +28,10 @@ headers = {
     "isToken": "false",
     "Host" : "www.ynjzjgcx.com"
 }
+
 url = "https://www.ynjzjgcx.com/prod-api/mohurd-pub/vcode/genVcode"
 data = {
-    "params" : "TA2Yxn+hsGOumlSjUGXmtu8qpf+75OcT8KZu3yI5rZOWj7Gtf2RbA1kkNEQzM17zgA2uTw47j/P+RVChAEHHpCyKmO5Bv8otU2xoBDiFvo+4b2cH7mo9kjPpXO95I064HDGIxqy6mhUqIsbG5FbG/wB5hwmk1fuvy0eZfucY6Bo="
+    "params": "eQqbhIu8fa3LrHHjQSdh4diW7+jgPUxyHbQa2EGr53Idei9OT//LmsFo6hItomdgvcr2uG14v5I3Y6seRYS8ePrKrejC0/yxe8tJt4sUBJ801gtAxc8c1IbWE0aqVgyFFyFRjdJFwVvj73UUw6MAbN4ZYpM3nUBLpXiXeltDROs="
 }
 response = requests.post(url, headers=headers, json=data)
 
