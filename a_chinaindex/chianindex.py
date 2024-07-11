@@ -24,7 +24,7 @@ headers = {
     "funcID": None,
     "incognitoMode": "0",
     "Referer" : "https://www.chinaindex.net/ranklist/5",
-    "Host" :"www.chinaindex.net",
+    "Host" :"www.a_chinaindex.net",
     "Accept-Encoding":"gzip, deflate, br, zstd"
 
 }
