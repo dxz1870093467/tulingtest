@@ -56,6 +56,19 @@ class YdmVerify(object):
         print(resp.text)
         return resp.json()['data']['data']
 
+    def slide_verify_22222(self, background_image, verify_type="22222"):
+        # 通用双图滑块  22222
+        payload = {
+            "image": base64.b64encode(background_image).decode(),
+            # "image": background_image,
+            "token": self._token,
+            "type": verify_type
+        }
+
+        resp = requests.post(self._custom_url, headers=self._headers, data=json.dumps(payload))
+        print(resp.text)
+        return resp.json()['data']['data']
+
     def sin_slide_verify(self, image, verify_type="20110"):
         # 通用单图滑块(截图)  20110
         payload = {
@@ -230,6 +243,3 @@ class YdmVerify(object):
                 continue
 
 
-if __name__ == '__main__':
-    y = YdmVerify()
-    y.slide_verify()
