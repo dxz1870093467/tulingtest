@@ -2741,50 +2741,54 @@ try {
    console.log(error.message)
 }
 
+function getApiKey(requets_time){
+    return window.getApiKey(requets_time)
+}
+
 
 // 调用示例
-const express = require('express');
-const app = express();
-const port = 3000;  // 设定服务器端口号
-
-// 定义一个 GET 请求的路由
-app.get('/get', async (req, res) => {
-    const requets_time = req.query.requets_time;  // 获取查询参数 requets_time
-    const offset = req.query.offset;  // 获取查询参数 offset
-    const limit = req.query.limit;    // 获取查询参数 limit
-    traceId = req.query.trace_id
-
-    // 定义一个 Promise 用于延迟返回结果
-    const delayedPromise = new Promise((resolve, reject) => {
-        const api_key = window.getApiKey(requets_time);
-        // 假设 window.zdyfun 是同步函数
-        window.zdyfun(api_key, offset, limit);
-        timeoutRef = setTimeout(() => {
-            try {
-                resolve(sent);  // 返回异步操作的结果
-            } catch (error) {
-                reject(error);  // 处理错误情况
-            }
-        }, 20); // 20 毫秒
-    });
-
-    try {
-         // 等待延迟 Promise 执行完成
-        sent = await delayedPromise;
-        console.log("sent:", sent);
-        lsbl= sent;
-        res.send(lsbl);  // 返回异步操作的结果
-
-         // 在异步操作完成后清除 setTimeout
-        clearTimeout(timeoutRef);
-
-    } catch (error) {
-         console.error("Error:", error);
-        res.status(500).send("Error occurred.");  // 返回错误响应
-    }
-});
-
-// 启动服务器
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
+// const express = require('express');
+// const app = express();
+// const port = 3000;  // 设定服务器端口号
+//
+// // 定义一个 GET 请求的路由
+// app.get('/get', async (req, res) => {
+//     const requets_time = req.query.requets_time;  // 获取查询参数 requets_time
+//     const offset = req.query.offset;  // 获取查询参数 offset
+//     const limit = req.query.limit;    // 获取查询参数 limit
+//     traceId = req.query.trace_id
+//
+//     // 定义一个 Promise 用于延迟返回结果
+//     const delayedPromise = new Promise((resolve, reject) => {
+//         const api_key = window.getApiKey(requets_time);
+//         // 假设 window.zdyfun 是同步函数
+//         window.zdyfun(api_key, offset, limit);
+//         timeoutRef = setTimeout(() => {
+//             try {
+//                 resolve(sent);  // 返回异步操作的结果
+//             } catch (error) {
+//                 reject(error);  // 处理错误情况
+//             }
+//         }, 20); // 20 毫秒
+//     });
+//
+//     try {
+//          // 等待延迟 Promise 执行完成
+//         sent = await delayedPromise;
+//         console.log("sent:", sent);
+//         lsbl= sent;
+//         res.send(lsbl);  // 返回异步操作的结果
+//
+//          // 在异步操作完成后清除 setTimeout
+//         clearTimeout(timeoutRef);
+//
+//     } catch (error) {
+//          console.error("Error:", error);
+//         res.status(500).send("Error occurred.");  // 返回错误响应
+//     }
+// });
+//
+// // 启动服务器
+// app.listen(port, () => {
+//     console.log(`Server is running at http://localhost:${port}`);
+// });

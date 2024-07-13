@@ -141,5 +141,15 @@ encryptPublicLong = function (_0x313507, _0x246cb1) {
 }
 //---------------------------------------------------------------------qmze1yzvhyzcyyjr 解析 end-----------------------------------------------------------
 
-console.log(_0x2f41b5(_0x4ba867, undefined))
-console.log(encodeURIComponent(_0x1dc70(_0x4a182b, undefined)))
+function getParams (_0x4ba867, _0x4a182b) {
+    fogq4n2exnzc0otg = _0x2f41b5(_0x4ba867, undefined);
+    qmze1yzvhyzcyyjr = encodeURIComponent(_0x1dc70(_0x4a182b, undefined))
+    params = {
+        "fogq4n2exnzc0otg" :fogq4n2exnzc0otg,
+        "qmze1yzvhyzcyyjr" :qmze1yzvhyzcyyjr
+    }
+    return params
+}
+
+// console.log(_0x2f41b5(_0x4ba867, undefined))
+// console.log(encodeURIComponent(_0x1dc70(_0x4a182b, undefined)))

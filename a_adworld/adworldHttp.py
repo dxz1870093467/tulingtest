@@ -1,5 +1,7 @@
+import execjs
 import requests
-
+import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
 '''
 21题
 使用线程池采集本站点数据
@@ -25,16 +27,39 @@ headers = {
     "sec-ch-ua-platform": "Windows",
     # "xhnjc3odeyndrhmj": "BQYIOT0oJiAeExs9BR8ZGAIFOg=="
 }
-cookies = {
-    "cngizm2ziytq3mwy": "7RcfKFOkrU606ki/7Em2ukWxs0e24hUXTbhHGuhCG+ZPQeBG+g==",
-    "fogq4n2exnzc0otg": "CgMBPAZcDQcKX0wSThhEE05JT0YdThAfSxR+fSx1cighIHctCQ=="
-}
-url = "https://adworld.xctf.org.cn/api/event/release_event/list/"
-params = {
-    # "qmze1yzvhyzcyyjr": "CgcGOAAfCgwYMwwHEAgDBURTHgAdFgcgCQkyJ3BnLjkXISY5KixzKCAhIDt2IDowMGVrfCU4ODcDL0ZZRBEUFg9WTkdaS0sSDw=="
-    "qmze1yzvhyzcyyjr": "BAAAPwAWBggZMxgaCBgeGUxSEgQUHgMtCQEPG0BeEg0WISI0Iix%2BJCggPC9vOC4tMG1gcCUxNDMCLzIkPGFpagdXQkNTQ08fAQ%3D%3D"
-}
-response = requests.get(url, headers=headers, cookies=cookies, params=params)
 
-print(response.text)
-print(response)
+with open("onlyGetParams.js", encoding='utf-8') as f1:
+    get_params_code = f1.read()
+get_params_ctll = execjs.compile(get_params_code)
+
+def get_ad_world_info(pageNum):
+    page_info = "event_status=&event_type=&isSearch=false&page={}&page_size=20&search="
+    params = get_params_ctll.call("getParams", "c1eeb43e8d6b7830a1cd1d88a02bac0b",
+                                  page_info.format(pageNum))
+    cookies = {
+        # "cngizm2ziytq3mwy": "7RcfKFOkrU606ki/7Em2ukWxs0e24hUXTbhHGuhCG+ZPQeBG+g==",
+        "fogq4n2exnzc0otg": params['fogq4n2exnzc0otg']
+    }
+    url = "https://adworld.xctf.org.cn/api/event/release_event/list/"
+    params = {
+        # "qmze1yzvhyzcyyjr": "CgcGOAAfCgwYMwwHEAgDBURTHgAdFgcgCQkyJ3BnLjkXISY5KixzKCAhIDt2IDowMGVrfCU4ODcDL0ZZRBEUFg9WTkdaS0sSDw=="
+        "qmze1yzvhyzcyyjr": params['qmze1yzvhyzcyyjr']
+    }
+    response = requests.get(url, headers=headers, cookies=cookies, params=params)
+    object_info = json.loads(response.content.decode())
+    if object_info['data'] is not None and object_info['data']['rows'] is not None:
+        rows = []
+        for row in object_info['data']['rows']:
+            info = {"标题": row['release_name'],
+                    "比赛时间": row['competition_start_time'] + "至" + row['competition_end_time'],
+                    "主办方": row['release_sponsor']}
+            rows.append(info)
+        return rows
+    return None
+
+
+if __name__ == '__main__':
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        futures = [pool.submit(get_ad_world_info, page) for page in range(8)]
+        for futures in as_completed(futures):
+            print(futures.result())
