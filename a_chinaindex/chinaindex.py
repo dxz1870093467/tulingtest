@@ -13,7 +13,7 @@ headers = {
 url = "https://www.chinaindex.net/iIndexMobileServer/teleplay/rank/waiting/fans"
 response = requests.get(url, headers=headers)
 #解析response的参数
-url = "http://localhost:3001/get"
+url = "http://localhost:3001/get"  #使用接口是因为 使用 execjs 加载 js报错，报错信息为 UnicodeDecodeError: 'gbk' codec can't decode byte 0xb7 in position 192
 responsejs = requests.post(url, json=json.loads(response.text))
 #保存mongodb数据库top10
 client = pymongo.MongoClient(host='localhost', port=27017)
