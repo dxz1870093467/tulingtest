@@ -60,12 +60,15 @@ class YdmVerify(object):
         # 通用双图滑块  22222
         payload = {
             "image": base64.b64encode(background_image).decode(),
-            # "image": background_image,
+            "name": "单图滑块优化类型(22222)",
+            "num": 1,
             "token": self._token,
-            "type": verify_type
+            "type": verify_type,
+            "extra": False,
+            "attention_tag": 2
         }
 
-        resp = requests.post(self._custom_url, headers=self._headers, data=json.dumps(payload))
+        resp = requests.post("http://api.jfbym.com/api/YmServer/testCustomApi", data=payload)
         print(resp.text)
         return resp.json()['data']['data']
 
